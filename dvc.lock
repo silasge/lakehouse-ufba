@@ -1,0 +1,75 @@
+schema: '2.0'
+stages:
+  download_and_extract:
+    cmd: poetry run python lakehouse_ufba/download/download_and_extract_files.py
+    deps:
+    - path: lakehouse_ufba/download/download_and_extract_files.py
+      hash: md5
+      md5: a56b7c30d593d52b3b8fab9a1d5aa80e
+      size: 1229
+    outs:
+    - path: logs/download_and_extract.log
+      hash: md5
+      md5: ef2037b20ae2aed990c61c6ccd434eb4
+      size: 294
+  config_db:
+    cmd: poetry run python lakehouse_ufba/sql/create_schemas_and_tables.py
+    deps:
+    - path: lakehouse_ufba/sql/create_schemas_and_tables.py
+      hash: md5
+      md5: bb338ebe70ab1b62e1ea440ef34e7eee
+      size: 823
+    - path: logs/download_and_extract.log
+      hash: md5
+      md5: ef2037b20ae2aed990c61c6ccd434eb4
+      size: 294
+    - path: sql/
+      hash: md5
+      md5: afca0a04814f69ff4efec0d5c93f39e9.dir
+      size: 19159
+      nfiles: 2
+    params:
+      lakehouse_ufba/params.py:
+        DuckDBFile.DUCKDB: data/lakehouse/ufba.duckdb
+        SQLFiles.SCHEMA: sql/schemas.sql
+        SQLFiles.UFBA_BRONZE: sql/ufba_bronze_tables.sql
+    outs:
+    - path: logs/config_db.log
+      hash: md5
+      md5: 95572c13ec1062149aab5a14bb3b8183
+      size: 280
+  import_ufba_bronze_socioeco:
+    cmd: poetry run python lakehouse_ufba/ufba_bronze/socioeconomic/import_socioeconomic_files.py
+    deps:
+    - path: lakehouse_ufba/ufba_bronze/socioeconomic
+      hash: md5
+      md5: 4737d6d92b0b665bcb8dfd2227fe6630.dir
+      size: 2068
+      nfiles: 2
+    - path: logs/config_db.log
+      hash: md5
+      md5: 95572c13ec1062149aab5a14bb3b8183
+      size: 280
+    params:
+      lakehouse_ufba/params.py:
+        DuckDBFile.DUCKDB: data/lakehouse/ufba.duckdb
+        RawFiles.SOCIOECONOMIC:
+        - data/raw/socioeconomico/BI_Vestibular_2009_Inscritos.sav
+        - data/raw/socioeconomico/BI_Vestibular_2010_Inscritos.sav
+        - data/raw/socioeconomico/BI_Vestibular_2011_Inscritos.sav
+        - data/raw/socioeconomico/BI_Vestibular_2012_Inscritos.sav
+        - data/raw/socioeconomico/BI_Vestibular_2013_Inscritos.sav
+        - data/raw/socioeconomico/Vestibular_2005_inscritos.sav
+        - data/raw/socioeconomico/Vestibular_2006_inscritos.sav
+        - data/raw/socioeconomico/Vestibular_2007_inscritos.sav
+        - data/raw/socioeconomico/Vestibular_2008_Inscritos.sav
+        - data/raw/socioeconomico/Vestibular_2009_Inscritos.sav
+        - data/raw/socioeconomico/Vestibular_2010_Inscritos.sav
+        - data/raw/socioeconomico/Vestibular_2011_Inscritos.sav
+        - data/raw/socioeconomico/Vestibular_2012_Inscritos.sav
+        - data/raw/socioeconomico/Vestibular_2013_Inscritos.sav
+    outs:
+    - path: logs/import_ufba_bronze_socioeco.log
+      hash: md5
+      md5: 211fd24bd5596c1f79d32081b0191721
+      size: 333

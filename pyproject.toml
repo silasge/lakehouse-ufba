@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "lakehouse-ufba"
+version = "0.1.0"
+description = ""
+authors = ["Silas Genário <silasge.dev@gmail.com>"]
+readme = "README.md"
+packages = [{include = "lakehouse_ufba"}]
+
+[tool.poetry.dependencies]
+python = "^3.11,<3.13"
+duckdb = "^0.8.1"
+polars = {extras = ["pyarrow"], version = "^0.19.3"}
+dvc = "^3.22.0"
+dvc-gdrive = "^2.20.0"
+pandas = "~2.0"
+pyreadstat = "^1.2.3"
+loguru = "^0.7.2"
+py7zr = "^0.20.6"
+pydrive2 = "^1.17.0"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.25.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

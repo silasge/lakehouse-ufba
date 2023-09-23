@@ -1,0 +1,5 @@
+outs:
+- md5: 3d790604da6327f6a3c9aaf5e7236adf
+  size: 189542400
+  hash: md5
+  path: ufba.duckdb

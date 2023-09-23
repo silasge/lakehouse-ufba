@@ -1,0 +1,37 @@
+stages:
+  # Download and extract files
+  download_and_extract:
+    cmd: poetry run python lakehouse_ufba/download/download_and_extract_files.py
+    deps:
+      - lakehouse_ufba/download/download_and_extract_files.py
+    outs:
+      - logs/download_and_extract.log
+  # Configure database
+  config_db:
+    cmd: poetry run python lakehouse_ufba/sql/create_schemas_and_tables.py
+    deps:
+      - logs/download_and_extract.log
+      - sql/
+      - lakehouse_ufba/sql/create_schemas_and_tables.py
+    params:
+      - lakehouse_ufba/params.py:
+        - DuckDBFile.DUCKDB
+        - SQLFiles.SCHEMA
+        - SQLFiles.UFBA_BRONZE
+    outs:
+      - logs/config_db.log
+  # Ufba bronze imports
+  # socioeconomic
+  import_ufba_bronze_socioeco:
+    cmd: poetry run python lakehouse_ufba/ufba_bronze/socioeconomic/import_socioeconomic_files.py
+    deps:
+      - logs/config_db.log
+      - lakehouse_ufba/ufba_bronze/socioeconomic
+    params:
+      - lakehouse_ufba/params.py:
+        - DuckDBFile.DUCKDB
+        - RawFiles.SOCIOECONOMIC
+    outs: 
+      - logs/import_ufba_bronze_socioeco.log
+    # academic
+      
