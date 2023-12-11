@@ -17,6 +17,10 @@ pyreadstat = "^1.2.3"
 loguru = "^0.7.2"
 py7zr = "^0.20.6"
 pydrive2 = "^1.17.0"
+sqlalchemy = "^2.0.21"
+psycopg2 = "^2.9.8"
+prefect = "^2.13.4"
+mariadb = "^1.1.7"
 
 
 [tool.poetry.group.dev.dependencies]

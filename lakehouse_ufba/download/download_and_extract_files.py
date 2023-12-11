@@ -2,12 +2,13 @@ import os
 from collections import namedtuple
 
 import py7zr
+from prefect import flow, task
+from prefect.tasks import task_input_hash
 from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
 
-from lakehouse_ufba.utils import log
 
-
+@task(cache_key_fn=task_input_hash)
 def get_gauth():
     gauth = GoogleAuth()
     gauth.LocalWebserverAuth()
@@ -15,16 +16,19 @@ def get_gauth():
     return drive    
 
 
+@task@task(cache_key_fn=task_input_hash)
 def download_file_from_drive(gauth, id_, save_as) -> None:    
     file = gauth.CreateFile({"id": id_})
     file.GetContentFile(save_as)
     
     
+@task@task(cache_key_fn=task_input_hash)
 def extract_7z(file_7z):
     with py7zr.SevenZipFile(file_7z, "r") as archive:
         archive.extractall(path=os.path.dirname(file_7z))
     
-@log(log_file="logs/download_and_extract.log")    
+    
+@flow  
 def download_and_extact():
     drive = get_gauth()
     
@@ -39,7 +43,6 @@ def download_and_extact():
         download_file_from_drive(gauth=drive, id_=file.id_, save_as=file.path)    
         extract_7z(file.path)
         
-        
+
 if __name__ == "__main__":
     download_and_extact()
-        

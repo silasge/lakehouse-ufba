@@ -1,15 +1,4 @@
-class DuckDBFile:
-    # database file
-    DUCKDB = "data/lakehouse/ufba.duckdb"
 
-
-class SQLFiles:    
-    # schema file
-    SCHEMA = "sql/schemas.sql"
-    
-    # ufba_bronze tables file
-    UFBA_BRONZE = "sql/ufba_bronze_tables.sql"
-    
     
 class RawFiles:
     # socioeconomic files
